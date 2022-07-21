@@ -42,6 +42,12 @@
 \cfoot{\textbf{\thepage \ / \pageref{LastPage}}}
 \RequirePackage{setspace}			% Varying line spacing
 \RequirePackage[none]{hyphenat}		% No word break with hyphen
+\RequirePackage{graphicx, tikz, wrapfig} 	% Incorporation of graphics
+\graphicspath{{./images}}
+\RequirePackage{multicol}			% Multi columns
+\setlength{\columnsep}{-14cm}
+\RequirePackage{makecell}
+
 
 %	SUPPORTING FUNCTIONS
 \def\hrulefill{\leavevmode\leaders\hrule height 1.4pt\hfill\kern\z@}
@@ -62,20 +68,35 @@
 \newcommand*{\setlinkedin}[1]{\def\@linkedin{#1}}
 \newcommand*{\setgithub}[1]{\def\@github{#1}}
 \newcommand*{\setblog}[1]{\def\@blog{#1}}
+\newcommand*{\setprofilepic}[1]{\def\@profilepic{#1}}
+
 %	CV TITLE
 \newcommand{\cvtitle}[1]{
-	\begin{center}
-		{\fontsize{27}{0}\selectfont
-			\texttt{\@firstname \ {\color{gray}{\@lastname}} }
-			\textcolor{red}{\cvContactSep \textbf{#1}}}\\
-		{\fontsize{12}{0}\selectfont
-			\href{mailto:\@mail}{\faIcon{envelope} \@mail}
-			\cvContactSpace \@address\\
-			%\cvContactSpace \faIcon{phone} \@mobile
-			\href{\@github}{\faIcon{github} GitHub}
-			\cvContactSpace \href{\@linkedin}{\faIcon{linkedin} LinkedIn}
-			\cvContactSpace \href{\@blog}{\faIcon{blog} Blog}\\~{\Large \\~\\}}
-	\end{center}
+	{\fontsize{27}{0}\selectfont
+		\texttt{\@firstname \ {\color{gray}{\@lastname}} }
+		\textcolor{red}{\cvContactSep \textbf{#1}}}\\
+	{\fontsize{12}{0}\selectfont
+		\href{mailto:\@mail}{\faIcon{envelope} \@mail}
+		\cvContactSpace \@address}\\
+	{\fontsize{12}{0}\selectfont
+%		\cvContactSpace \faIcon{phone} \@mobile
+		\href{\@github}{\faIcon{github} GitHub}
+		\cvContactSpace \href{\@linkedin}{\faIcon{linkedin} LinkedIn}
+%		\cvContactSpace \href{\@blog}{\faIcon{blog} Blog}
+}}
+\newcommand{\cvtitlepic}[1]{
+	\ifdefined \@profilepic
+		\begin{tabular}{m{3.2cm} m{14cm}}
+			\begin{tikzpicture}
+				\clip (0,0) circle (1.5cm) node {\includegraphics[width=2.7cm]{\@profilepic}};
+			\end{tikzpicture}
+			& \makecell{\cvtitle{#1}}
+		\end{tabular}\\~{\Large \\~\\}
+	\else
+		\begin{center}
+			\cvtitle{#1}\\~{\Large \\~\\}
+		\end{center}
+	\fi
 }
 %	CV SECTION
 \newcommand{\cvSection}[1]{
